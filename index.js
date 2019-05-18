@@ -37,6 +37,12 @@ const extractEntry = (entry, zip) => {
 	if (file.mode === 0) {
 		file.mode = 420;
 	}
+	
+	//fix for a bug while unzipping to unzip
+	//levels for more than 3 for uploaded zip files
+	if (file.mode === 493) {
+		file.type = 'directory';
+	}
 
 	return pify(zip.openReadStream.bind(zip))(entry)
 		.then(getStream.buffer)
